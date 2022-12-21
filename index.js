@@ -7,7 +7,10 @@ const nodemailer = require("nodemailer")
 const app = express()
 
 // Middlewares
-app.use(cors())
+app.use(cors({
+    allowedHeaders:"*",
+    origin:"*"
+}))
 app.use(bodyParser())
 app.use(express.json())
 
@@ -32,21 +35,24 @@ app.post("/sendmail" , (req,res) => {
         }
     })
    
-    const {name , phone , email , message } = req.body;
+    const {name , phone , email , message , category } = req.body;
+	
 
     const mailOptions = {
         from: 'ozaannhealthcare01@gmail.com', // sender address
-        to: 'suraj02manoj@gmail.com, jayagma032@gmail.com', // list of receivers 
+        to: 'ozaann@rediffmail.com, mukthar.ceo@gmail.com', // list of receivers 
         subject: "You've received a response", // Subject line
         html: `
-                Name : ${name},
-                Phone : ${phone},
-                Email : ${email},
-                Message : ${message}
-        `
+                <p>Name : ${name},</p>
+                <p>Phone : ${phone},</p>
+                <p>Email : ${email},</p>
+                <p>Category : ${category},</p>
+                <p>Message : ${message}</p>
+            `
         // plain text body
     };
 
+    // res.status(200).json({"status" : true});
     transporter.sendMail(mailOptions, function (err, info) {
         if(err){
             console.log(err);
